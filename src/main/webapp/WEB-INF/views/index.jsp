@@ -1,19 +1,23 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-
-<html>
+<!DOCTYPE html>
+<html lang="fr-fr">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Welcome to Spring Web MVC project</title>
+        <title>Connexion Saturne</title>
+        <meta charset="UTF-8"/> 
+        <link rel="stylesheet" type="text/css" media="screen" href="css/login.css"/>
     </head>
-
     <body>
-        <p>Hello! This is the default welcome page for a Spring Web MVC project.</p>
-        <p><i>To display a different welcome page for this project, modify</i>
-            <tt>index.jsp</tt> <i>, or create your own welcome page then change
-                the redirection in</i> <tt>redirect.jsp</tt> <i>to point to the new
-                welcome page and also update the welcome-file setting in</i>
-            <tt>web.xml</tt>.</p>
+        <header>
+            <img src="img/LogoCN.jpg" style="height: 55px; position: absolute; top: 10px; left: 10px;" alt="LogoCN">
+            <h1><img src="img/s2.jpg" style="height: 35px;"  alt="Saturne">  Saturne</h1>
+        </header>
+            <form action="index.do" method="POST" id="centre" class="box">
+                <h2>Identifiants</h2>
+                <p><input type="login" name="user" placeholder="Login"></p>
+                <p><input type="password" name="password" placeholder="Password"></p>
+                <p><button type="submit">Login</button></p>
+            </form>
+        <footer></footer>
     </body>
 </html>
+

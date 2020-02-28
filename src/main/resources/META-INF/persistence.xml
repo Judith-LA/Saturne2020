@@ -2,34 +2,34 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="Saturne_PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>org.centrale.pgrou.items.Question</class>
-    <class>org.centrale.pgrou.items.Reponse</class>
-    <class>org.centrale.pgrou.items.Image</class>
-    <class>org.centrale.pgrou.items.Groupe</class>
-    <class>org.centrale.pgrou.items.Quiz</class>
-    <class>org.centrale.pgrou.items.Test</class>
-    <class>org.centrale.pgrou.items.Personne</class>
-    <class>org.centrale.pgrou.items.Contenuquiz</class>
-    <class>org.centrale.pgrou.items.Notation</class>
-    <class>org.centrale.pgrou.items.Evaluationquestion</class>
-    <class>org.centrale.pgrou.items.Connexion</class>
-    <class>org.centrale.pgrou.items.Qcmrepeval</class>
-    <class>org.centrale.pgrou.items.Qcmrep</class>
-    <class>org.centrale.pgrou.items.Intervallerepeval</class>
-    <class>org.centrale.pgrou.items.Motcle</class>
-    <class>org.centrale.pgrou.items.Evaluationreponse</class>
-    <class>org.centrale.pgrou.items.Role</class>
-    <class>org.centrale.pgrou.items.Intervalle</class>
-    <class>org.centrale.pgrou.items.Qcm</class>
-    <class>org.centrale.pgrou.items.Intervallerep</class>
-    <class>org.centrale.pgrou.items.Menu</class>
-    <class>org.centrale.pgrou.items.Evaluation</class>
+    <class>org.centrale.pgrou.saturne.items.Quiz</class>
+    <class>org.centrale.pgrou.saturne.items.Evaluationquestion</class>
+    <class>org.centrale.pgrou.saturne.items.Qcm</class>
+    <class>org.centrale.pgrou.saturne.items.Test</class>
+    <class>org.centrale.pgrou.saturne.items.Menu</class>
+    <class>org.centrale.pgrou.saturne.items.Reponse</class>
+    <class>org.centrale.pgrou.saturne.items.Question</class>
+    <class>org.centrale.pgrou.saturne.items.Qcmrep</class>
+    <class>org.centrale.pgrou.saturne.items.Intervalle</class>
+    <class>org.centrale.pgrou.saturne.items.Qcmrepeval</class>
+    <class>org.centrale.pgrou.saturne.items.Contenuquiz</class>
+    <class>org.centrale.pgrou.saturne.items.Intervallerepeval</class>
+    <class>org.centrale.pgrou.saturne.items.Intervallerep</class>
+    <class>org.centrale.pgrou.saturne.items.Personne</class>
+    <class>org.centrale.pgrou.saturne.items.Connexion</class>
+    <class>org.centrale.pgrou.saturne.items.Evaluationreponse</class>
+    <class>org.centrale.pgrou.saturne.items.Notation</class>
+    <class>org.centrale.pgrou.saturne.items.Motcle</class>
+    <class>org.centrale.pgrou.saturne.items.Groupe</class>
+    <class>org.centrale.pgrou.saturne.items.Image</class>
+    <class>org.centrale.pgrou.saturne.items.Evaluation</class>
+    <class>org.centrale.pgrou.saturne.items.Role</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/Saturne2020"/>
-      <property name="javax.persistence.jdbc.user" value="postgres"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/Saturne_01"/>
+      <property name="javax.persistence.jdbc.user" value="Judith"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.password" value="azerty"/>
     </properties>
   </persistence-unit>
 </persistence>

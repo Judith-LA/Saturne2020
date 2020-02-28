@@ -28,11 +28,11 @@
     <!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) -->
 
     <mvc:annotation-driven/>
-    <context:component-scan base-package="org.centrale.pgrou.controllers" />
-
-    <jpa:repositories base-package="org.centrale.pgrou.repositories" 
-                      entity-manager-factory-ref="entityManagerFactoryBean" />
-
+    <context:component-scan base-package="org.centrale.pgrou.saturne.controllers" />
+    
+    <jpa:repositories base-package="org.centrale.pgrou.saturne.repositories" 
+                          entity-manager-factory-ref="entityManagerFactoryBean" />
+    
     <context:load-time-weaver/>
     <bean id="entityManagerFactoryBean"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -45,4 +45,5 @@
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactoryBean" />
     </bean>
+
 </beans>
