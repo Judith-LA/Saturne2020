@@ -8,7 +8,7 @@ package org.centrale.pgrou.saturne.repositories;
 import java.util.Collection;
 import java.util.Optional;
 import org.centrale.pgrou.saturne.controllers.Security;
-import org.centrale.pgrou.saturne.controllers.User;
+//import org.centrale.pgrou.saturne.controllers.User;
 import org.centrale.pgrou.saturne.items.Personne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -38,7 +38,12 @@ public class PersonneCustomRepositoryImpl implements PersonneCustomRepository {
     @Override
     public Personne create(String nom, String prenom, String login, String motdepasse) {
         if((nom != null) && (prenom != null) && (!nom.isEmpty())){
-            Personne pers = new Personne();
+            Personne pers;
+            if (nom.equals("Administrateur")){
+                pers = new Personne(1);
+            } else {
+                pers = new Personne();
+            }
             pers.setNom(nom);
             pers.setPrenom(prenom);
             if((login != null) && (!login.isEmpty())){
@@ -68,11 +73,11 @@ public class PersonneCustomRepositoryImpl implements PersonneCustomRepository {
 
     @Override
     public Personne findByName(String nom, String prenom) {
-        /**Collection<Personne> personneListe = personneRepository.findByPersonNomPrenom(nom,prenom);
+        Collection<Personne> personneListe = personneRepository.findByPersonNomPrenom(nom,prenom);
         
         if(personneListe.size()==1){
             return personneListe.iterator().next();
-        }**/
+        }
         return null;
     }
     

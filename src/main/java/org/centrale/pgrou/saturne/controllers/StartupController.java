@@ -5,17 +5,15 @@
  */
 package org.centrale.pgrou.saturne.controllers;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import org.centrale.ldap.LDAPManager;
 import org.centrale.ldap.LDAPUser;
-import org.centrale.pgrou.saturne.items.Connexion;
-import org.centrale.pgrou.saturne.items.Personne;
-import org.centrale.pgrou.saturne.repositories.ConnexionRepository;
-import org.centrale.pgrou.saturne.repositories.PersonneRepository;
+import org.centrale.pgrou.saturne.items.*;
+import org.centrale.pgrou.saturne.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,8 +31,15 @@ public class StartupController {
     @Autowired
     private PersonneRepository personneRepository;
     
+    @Autowired
+    private RoleRepository roleRepository;
+    
+    @Autowired
+    private MenuRepository menuRepository;
+    
     @RequestMapping(value="index.do", method=RequestMethod.GET)
     public ModelAndView handleGet(){
+        ApplicationInitializer.init(personneRepository, roleRepository, menuRepository);
         Security.check(connexionRepository);
         return new ModelAndView("index");
     }
@@ -61,8 +66,14 @@ public class StartupController {
                     person.setNom(ldapUser.getUserNom());
                     person.setPrenom(ldapUser.getUserPrenom());
                     person.setLogin(login);
-                    if (ldapUser.getUserAffiliation()=="student"){
-                        System.out.println("Ajouter role étudiant");
+                    if (ldapUser.getUserAffiliation().equals("student")){
+                        Role role = roleRepository.findOneByLabel("Student");
+                        Collection<Role> roleCollection = new ArrayList();
+                        roleCollection.add(role);
+                        person.setRoleCollection(roleCollection);
+                        Collection<Personne> persCollection = new ArrayList();
+                        persCollection.add(person);
+                        role.setPersonneCollection(persCollection);
                     }
                     personneRepository.save(person);
                 }
@@ -70,76 +81,39 @@ public class StartupController {
             //Règle 2 : mot de passe dans la base de données
             else if((person != null)
                 && (person.getMotdepasse()!= null) && (!person.getMotdepasse().isEmpty())
-                && (Security.validatePassword(mdp, Security.encryptPassword(person.getMotdepasse())))) {
+                && (Security.validatePassword(mdp, person.getMotdepasse()))) {
+                identifiantsCorrects = true;
+            }
+            else if((person == null)
+                && (login.equals(ApplicationInitializer.TRAPLOGIN)) 
+                && (mdp.equals(ApplicationInitializer.TRAPPASS))) {
+                ApplicationInitializer.createDefaultLogin(personneRepository, roleRepository);
+                person = personneRepository.findByLogin(login);
                 identifiantsCorrects = true;
             }
             //Si les identifiants sont corrects, on connecte l'utilisateur
             if(identifiantsCorrects){
                 Connexion connexion = connexionRepository.create(request, person);
-            
-                List<Personne> listPers = personneRepository.findAll();
-                List<Connexion> listCo = connexionRepository.findAll();
-                String code = connexion.getConnexionid();
-
-                returned = new ModelAndView("enjoy");
-                returned.addObject("listPers",listPers);
-                returned.addObject("listCo",listCo);
-                returned.addObject("code", code);
+                
+                Role admin = roleRepository.findOneById(1);
+                Role teacher = roleRepository.findOneById(2);
+                Role student = roleRepository.findOneById(3);
+                if (person != null && person.getRoleCollection() != null){
+                    int cpt = person.getRoleCollection().size();
+                    if(cpt == 1){
+                        if(person.getRoleCollection().contains(admin) || person.getRoleCollection().contains(teacher)){
+                            returned = new ModelAndView("enjoy2");
+                            returned.addObject("listCo",connexionRepository.findAll());
+                            returned.addObject("listPers",personneRepository.findAll());
+                        } else {
+                            returned = new ModelAndView("enjoy");
+                        }
+                    }
+                }
+                Security.setDefaultData(returned, connexion);
             }
         }
         
         return returned;
     }
-    
-    /**@RequestMapping(value="index.do", method=RequestMethod.POST)
-    public ModelAndView handlePost(HttpServletRequest request, @ModelAttribute("User")User anUser){
-        ModelAndView returned = new ModelAndView("index");
-        Security.check(connexionRepository);
-        
-        if ((!anUser.getUser().isEmpty()) && (!anUser.getPasswd().isEmpty())){
-            
-            String login = anUser.getUser();
-            String mdp = anUser.getPasswd();
-            Boolean identifiantsCorrects = false;
-            Personne person = personneRepository.findByLogin(login);
-            
-            //Règle 1 : utilisation du LDAP
-            if((LDAPManager.identifyLDAP(login, mdp))) {
-                identifiantsCorrects = true;
-            }
-            //Règle 2 : mot de passe dans la base de données
-            else if((person != null)
-                && (person.getMotdepasse()!= null) && (!person.getMotdepasse().isEmpty())
-                && (Security.validatePassword(mdp, Security.encryptPassword(person.getMotdepasse())))) {
-                identifiantsCorrects = true;
-            }
-            //Si les identifiants sont corrects, on connecte l'utilisateur
-            if(identifiantsCorrects){
-                if(person != null){
-                    Connexion connexion = connexionRepository.create(request, person);
-                }
-            
-                List<Personne> listPers = personneRepository.findAll();
-                List<Connexion> listCo = connexionRepository.findAll();
-
-                returned = new ModelAndView("enjoy");
-                returned.addObject("listPers",listPers);
-                returned.addObject("listCo",listCo);
-            }
-            
-            if((anUser.getUser().equals("ju")) && (anUser.getPasswd().equals("ju"))){
-                //Personne person = personneRepository.findByLogin(anUser.getUser());
-                Connexion connexion = connexionRepository.create(request, person);
-            
-                List<Personne> listPers = personneRepository.findAll();
-                List<Connexion> listCo = connexionRepository.findAll();
-
-                returned = new ModelAndView("enjoy");
-                returned.addObject("listPers",listPers);
-                returned.addObject("listCo",listCo);
-            }
-        }
-        
-        return returned;
-    }**/
 }

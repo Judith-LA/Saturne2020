@@ -19,6 +19,6 @@ public interface PersonneRepository extends JpaRepository<Personne, Integer>, Pe
     @Query(name = "Personne.findByLogin")
     public Collection<Personne> findByPersonLogin(@Param("login")String personneLogin);
     
-    /**@Query("SELECT p FROM Personne WHERE p.nom = :nom AND p.prenom = :prenom")
-    public Collection<Personne> findByPersonNomPrenom(@Param("nom")String nom, @Param("prenom")String prenom);**/
+    @Query(value="SELECT p FROM Personne WHERE p.nom = ?1 AND p.prenom = ?2", nativeQuery=true)
+    public Collection<Personne> findByPersonNomPrenom(@Param("nom")String nom, @Param("prenom")String prenom);
 }

@@ -5,6 +5,7 @@
  */
 package org.centrale.pgrou.saturne.repositories;
 
+import org.centrale.pgrou.saturne.items.Menu;
 import org.centrale.pgrou.saturne.items.Role;
 
 /**
@@ -17,14 +18,14 @@ public interface RoleCustomRepository {
      * @param nom
      * @return 
      */
-    public Role create(String nom);
+    public Role create(String nom, Integer id);
     
     /**
      * Lie un rôle et un menu
      * @param role
      * @param menu 
      */
-    //public void linkRoleAndMenu(Role role, Menu menu);
+    public void linkRoleAndMenu(Role role, Menu menu);
     
     /**
      * Trouve un rôle à partir de son identifiant
@@ -39,4 +40,5 @@ public interface RoleCustomRepository {
      * @return 
      */
     public Role findOneByLabel(String label);
+    
 }

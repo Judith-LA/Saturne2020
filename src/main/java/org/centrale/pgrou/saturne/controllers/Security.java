@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.centrale.pgrou.saturne.items.Connexion;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.centrale.pgrou.saturne.repositories.ConnexionRepository;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -97,5 +98,10 @@ public class Security {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             return encoder.matches(origin, encrypted);
         }
+    }
+    
+    public static void setDefaultData(ModelAndView model, Connexion connection) {
+        model.addObject("code", connection.getConnexionid());
+        model.addObject("connected", connection.getPersonneid());
     }
 }
