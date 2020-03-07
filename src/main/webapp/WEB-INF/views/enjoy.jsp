@@ -20,48 +20,17 @@
                             <li><a href="#">Résultats des évaluations</a></li>
                             <li><a href="#">Historique des auto-évaluations</a></li>
                             <li><a href="#">Paramètres</a></li>
-                            <li><a href="#">Déconnexion</a></li>
+                            <form method="POST" action="Disconnect.do">
+                                <input type="hidden" name="code" id="code" value="${code}"/>
+                                <li><a href="#">Déconnexion</a></li>
+                            </form>
                         </ul>
                     </li>
                 </ul>
             </nav>
             </br>
         </header>
-        <div>
-	<h2>ENJOY !</h2>
-        <table>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Login</th>
-            </tr>
-            <c:forEach var="pers" items="${listPers}">
-                <tr>
-                    <td>${pers.personneid}</td>
-                    <td>${pers.nom}</td>
-                    <td>${pers.prenom}</td>
-                    <td>${pers.login}</td>
-                </tr>
-            </c:forEach>
-        </table>
-        </br>
-        <table>
-            <tr>
-                <th>Id</th>
-                <th>Date de début de connexion</th>
-                <th>Date de fin de connexion</th>
-                <th>Adresse IP</th>
-            </tr>
-            <c:forEach var="co" items="${listCo}">
-                <tr>
-                    <td>${co.connexionid}</td>
-                    <td>${co.debutconnexion}</td>
-                    <td>${co.finconnexion}</td>
-                    <td>${co.ip}</td>
-                </tr>
-            </c:forEach>
-        </table>
+	<h2>ENJOY Students!</h2>
         <footer></footer>
     </body>
 </html>

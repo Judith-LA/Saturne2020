@@ -89,6 +89,7 @@ nav a:hover {
     background-color: #102645;
     position: absolute;
     width: 85%;
+    z-index: 1000;
 }
 
 .sous li{
