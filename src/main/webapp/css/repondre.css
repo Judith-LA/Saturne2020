@@ -1,10 +1,12 @@
-table{
-    border: 1px solid #102645; 
-    color:#102645;
-}
-tr{background-color:white; color:#102645;}
-td{border:1px solid #102645;color:#102645; height: 15px; text-align: center;}
-th{background-color:#fab600;color:white;}
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 22 févr. 2020, 11:11:18
+    Author     : Mario
+*/
 
 h1 {
 	margin: 0 0 10px;
@@ -34,21 +36,39 @@ header {
     background-color: #102645;
 }
 
-#haut {
-    position: relative;
-    left: 10px;
+#gauche {
+    position: fixed;
+    width: 150px; 
+    height: 50px;
+    top: 145px;
+    left: 1%;
+    border-style: groove;
+    border-color: #fab600;
+    border-radius: 5px;
+    padding: 1%;
+    text-align: center;
 }
 
-#bas {
+#centre {
     position: relative;
-    top: 10px;
-    left: 10px;
+    width: 970px;
+    top: 15px;
+    left: 200px;
+    border-style: groove;
+    border-color: #fab600;
+    border-radius: 5px;
+    padding: 1%;
 }
 
-#droite {
-    position: absolute;
-    top: 140px;
-    right: 150px;
+#noir {
+    background-color: #102645;
+    color: white;
+    width: 100%;
+    
+}
+
+.box {
+    display: inline-block;
 }
 
 nav {

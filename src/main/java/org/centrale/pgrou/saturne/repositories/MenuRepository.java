@@ -9,7 +9,6 @@ import java.util.Collection;
 import org.centrale.pgrou.saturne.items.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -24,16 +23,16 @@ public interface MenuRepository extends JpaRepository<Menu, Integer>, MenuCustom
      * @param code
      * @return
      */
-    @Query(value="SELECT DISTINCT Menu.* FROM Connexion"
+    /**@Query(value="SELECT DISTINCT Menu.* FROM Connexion"
         + "INNER JOIN Rolepersonne USING (Personneid)"
         + "INNER JOIN Menuaccessible USING (Roleid)"
         + "INNER JOIN Menu USING (Menuid)"
-        + "WHERE Connexion.connexionid = ?1", nativeQuery=true)
-    /**@Query(value="SELECT DISTINCT Menu.* FROM Menu"
+        + "WHERE Connexion.connexionid = ?1", nativeQuery=true)**/
+    @Query(value="SELECT DISTINCT Menu.* FROM Menu "
             + "INNER JOIN Menuaccessible USING (Menuid)"
             + "INNER JOIN Rolepersonne USING (Roleid)"
             + "INNER JOIN Connexion USING (Personneid)"
-            + "WHERE Connection.Connection_ID = ?1", nativeQuery=true)**/
+            + "WHERE Connexion.connexionid = ?1", nativeQuery=true)
     public Collection<Menu> getAvailableMenus(String code);
     
     /**
@@ -42,10 +41,14 @@ public interface MenuRepository extends JpaRepository<Menu, Integer>, MenuCustom
      * @param personId
      * @return
      */
-    @Query(value="SELECT DISTINCT Menu.* FROM Rolepersonne"
+    /**@Query(value="SELECT DISTINCT Menu.* FROM Rolepersonne"
         + "INNER JOIN Menuaccessible USING (Roleid)"
         + "INNER JOIN Menu USING (Menuid)"
-        + "WHERE Rolepersonne.personneid = ?1", nativeQuery=true)
+        + "WHERE Rolepersonne.personneid = ?1", nativeQuery=true)**/
+    @Query(value="SELECT DISTINCT Menu.* FROM Menu "
+            + "INNER JOIN Menuaccessible USING (Menuid) "
+            + "INNER JOIN Rolepersonne USING (Roleid) "
+            + "WHERE Rolepersonne.personneid = ?1", nativeQuery=true)
     public Collection<Menu> getAvailableMenus(Integer personId);
     
     /**
@@ -55,10 +58,13 @@ public interface MenuRepository extends JpaRepository<Menu, Integer>, MenuCustom
      * @param nom
      * @return
      */
-    @Query(value="SELECT DISTINCT Menu.* FROM Rolepersonne"
+    /**@Query(value="SELECT DISTINCT Menu.* FROM Rolepersonne"
         + "INNER JOIN Menuaccessible USING (Roleid)"
         + "INNER JOIN Menu USING (Menuid)"
-        + "WHERE Rolepersonne.personneid = ?1 AND Menu.nom = ?2", nativeQuery=true)
-            
+        + "WHERE Rolepersonne.personneid = ?1 AND Menu.nom = ?2", nativeQuery=true)**/
+    @Query(value="SELECT DISTINCT Menu.* FROM Menu "
+            + "INNER JOIN Menuaccessible USING (Menuid) "
+            + "INNER JOIN Rolepersonne USING (Roleid) "
+            + "WHERE Rolepersonne.personneid = ?1 AND Menu.nom = ?2", nativeQuery=true)        
     public Collection<Menu> checkMenuLink(Integer personId, String nom);
 }

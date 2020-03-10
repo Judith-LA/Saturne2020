@@ -11,11 +11,13 @@ import org.centrale.pgrou.saturne.items.Menu;
 import org.centrale.pgrou.saturne.items.Personne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author louis-alexandre
  */
+@Repository
 public class MenuCustomRepositoryImpl implements MenuCustomRepository {
     
     @Autowired

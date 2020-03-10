@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.centrale.pgrou.saturne.items.Connexion;
 import org.centrale.pgrou.saturne.repositories.ConnexionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,13 +19,14 @@ import org.springframework.web.servlet.ModelAndView;
  *
  * @author louis-alexandre
  */
+@Controller
 public class DisconnectController {
     
     @Autowired
     ConnexionRepository connexionRepository;
     
-    @RequestMapping(value = "Disconnect.do", method = RequestMethod.POST)
-    public ModelAndView handlePost(HttpServletRequest request) {
+    @RequestMapping(value = "disconnect.do", method = RequestMethod.GET)
+    public ModelAndView handleGet(HttpServletRequest request) {
         Security.check(connexionRepository);
         String code = request.getParameter("code");
         

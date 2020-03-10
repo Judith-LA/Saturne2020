@@ -17,6 +17,6 @@ import org.springframework.data.repository.query.Param;
  * @author louis-alexandre
  */
 public interface ConnexionRepository extends JpaRepository<Connexion, String>, ConnexionCustomRepository{
-    @Query(name = "Connexion.findByFinconnexion")
-    public Collection<Connexion> findAllBefore(@Param("finconnexion")Date expireDate);
+    @Query(value="SELECT * FROM Connexion WHERE finconnexion < ?1", nativeQuery=true)
+    public Collection<Connexion> findAllExpireBefore(Date expireDate);
 }

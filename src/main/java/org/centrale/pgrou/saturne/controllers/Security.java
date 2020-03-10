@@ -102,6 +102,8 @@ public class Security {
     
     public static void setDefaultData(ModelAndView model, Connexion connection) {
         model.addObject("code", connection.getConnexionid());
-        model.addObject("connected", connection.getPersonneid());
+        model.addObject("persId", connection.getPersonneid());
+        model.addObject("nom",connection.getPersonneid().getNom());
+        model.addObject("prenom",connection.getPersonneid().getPrenom());
     }
 }

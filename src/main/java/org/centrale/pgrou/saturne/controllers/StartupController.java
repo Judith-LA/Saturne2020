@@ -7,11 +7,13 @@ package org.centrale.pgrou.saturne.controllers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.centrale.ldap.LDAPManager;
 import org.centrale.ldap.LDAPUser;
 import org.centrale.pgrou.saturne.items.*;
 import org.centrale.pgrou.saturne.repositories.*;
+import org.centrale.pgrou.saturne.tools.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,9 @@ public class StartupController {
     
     @Autowired
     private MenuRepository menuRepository;
+    
+    @Autowired
+    private TestRepository testRepository;
     
     @RequestMapping(value="index.do", method=RequestMethod.GET)
     public ModelAndView handleGet(){
@@ -84,6 +89,7 @@ public class StartupController {
                 && (Security.validatePassword(mdp, person.getMotdepasse()))) {
                 identifiantsCorrects = true;
             }
+            //Règle 3 :l'administrateur doit être dans la base de données
             else if((person == null)
                 && (login.equals(ApplicationInitializer.TRAPLOGIN)) 
                 && (mdp.equals(ApplicationInitializer.TRAPPASS))) {
@@ -102,11 +108,12 @@ public class StartupController {
                     int cpt = person.getRoleCollection().size();
                     if(cpt == 1){
                         if(person.getRoleCollection().contains(admin) || person.getRoleCollection().contains(teacher)){
-                            returned = new ModelAndView("enjoy2");
-                            returned.addObject("listCo",connexionRepository.findAll());
-                            returned.addObject("listPers",personneRepository.findAll());
+                            returned = new ModelAndView("AccueilProfesseur");
+                            Security.setDefaultData(returned, connexion);
                         } else {
-                            returned = new ModelAndView("enjoy");
+                            returned = new ModelAndView("AccueilEtudiant");
+                            Security.setDefaultData(returned, connexion);
+                            returned.addObject("listTests",testRepository.affichageProchainsTests(login));
                         }
                     }
                 }

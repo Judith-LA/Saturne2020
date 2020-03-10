@@ -71,7 +71,7 @@ public class ConnexionCustomRepositoryImpl implements ConnexionCustomRepository 
 
     @Override
     public void removeOld() {
-        Collection<Connexion> liste = connexionRepository.findAllBefore(Utilities.getCurrentTime());
+        Collection<Connexion> liste = connexionRepository.findAllExpireBefore(Utilities.getCurrentTime());
         connexionRepository.deleteAll(liste);
     }
 
