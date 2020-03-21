@@ -129,8 +129,24 @@ public class QuestionController {
                 motcleRepository.save(aMotCle);
             }
         }
+        Qcm qcmQues = qcmRepository.findWithParameters(question1.getQuestionid());
+        //Collection<Reponse> repQues = question1.getReponseCollection();
+        List<Reponse> repQues = reponseRepository.findWithParameter(question1);
+        JSONArray listReponses = new JSONArray();
+        for(Reponse r: repQues){
+            JSONObject rep = new JSONObject();
+            rep.put("repId", r.getReponseid());
+            rep.put("estCorrecte", r.getCorrecte());
+            List<Qcmrep> qcmrep = qcmrepRepository.findWithParameter(r);
+            for(Qcmrep qr:qcmrep){
+                rep.put("enonceRep", qr.getEnonce());
+            }
+            listReponses.put(rep);
+        }
         object.put("quesId", question1.getQuestionid());
         object.put("enonce", question1.getEnonce());
+        object.put("repUnique", qcmQues.getRepunique());
+        object.put("listeReponses", listReponses);
         return returned.addObject("theResponse",object.toString());
     }
     

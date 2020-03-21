@@ -5,6 +5,7 @@
  */
 package org.centrale.pgrou.saturne.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -195,7 +196,7 @@ public class AutoEvalController {
             List<Reponse> reponses = reponseRepository.findWithParameter(question);
             List<ReponseQCM> listRepQCM = new ArrayList();
             for (Reponse rep: reponses){
-                Qcmrep qr = qcmrepRepository.findWithParameter(rep);
+                Qcmrep qr = qcmrepRepository.findWithReponseId(rep);
                 ReponseQCM repQCM = new ReponseQCM(qr.getEnonce(),qr.getQcmrepid(),rep.getCorrecte());
                 listRepQCM.add(repQCM);                    
             }

@@ -42,6 +42,13 @@ public class QuizController {
     private PersonneRepository personneRepository;
     @Autowired
     private ContenuquizRepository contenuquizRepository;
+    @Autowired
+    private QcmRepository qcmRepository;
+    @Autowired
+    private QcmrepRepository qcmrepRepository;
+    @Autowired
+    private ReponseRepository reponseRepository;
+    
 	
     @RequestMapping(value="versCreerQuiz.do",method=RequestMethod.GET)
     public ModelAndView creerQuiz(HttpServletRequest request) throws ParseException {
@@ -73,6 +80,37 @@ public class QuizController {
         }
         
         return returned.addObject("theResponse",returnedObject.toString());
+    }
+    
+    @RequestMapping(value="afficherQuestion.do",method=RequestMethod.POST)
+    public ModelAndView afficherQuestion(HttpServletRequest request) throws ParseException{
+        ModelAndView returned = new ModelAndView("ajax");
+        JSONObject object = new JSONObject();
+        String quesIdStr = request.getParameter("quesId");
+        int quesId = Integer.parseInt(quesIdStr);
+        Optional<Question> ques = questionRepository.findById(quesId);
+        if(ques.isPresent()){
+            Question question1 = ques.get();
+            Qcm qcmQues = qcmRepository.findWithParameters(question1.getQuestionid());
+            List<Reponse> repQues = reponseRepository.findWithParameter(question1);
+            JSONArray listReponses = new JSONArray();
+            for(Reponse r: repQues){
+                JSONObject rep = new JSONObject();
+                rep.put("repId", r.getReponseid());
+                rep.put("estCorrecte", r.getCorrecte());
+                List<Qcmrep> qcmrep = qcmrepRepository.findWithParameter(r);
+                for(Qcmrep qr:qcmrep){
+                    rep.put("enonceRep", qr.getEnonce());
+                }
+                listReponses.put(rep);
+            }
+            object.put("quesId", question1.getQuestionid());
+            object.put("enonce", question1.getEnonce());
+            object.put("repUnique", qcmQues.getRepunique());
+            object.put("listeReponses", listReponses);
+        }
+        
+        return returned.addObject("theResponse",object.toString());
     }
     
     @RequestMapping(value="saveQuiz.do",method=RequestMethod.POST)
