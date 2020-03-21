@@ -37,7 +37,7 @@ function reinitialiserNouv(){
         currentElement = currentElement.previousElementSibling;
         aSupprimer.remove();
     }
-    var enonceRepUni1 = document.getElementsByName('enonceRepUni1')[0];
+    var enonceRepUni1 = document.getElementsByName('enonceRepUni')[0];
     enonceRepUni1.value = "Entrez l'énoncé ici";
     var QcmRepUni = document.getElementsByName('QcmRepUni')[0];
     QcmRepUni.style.display="none";
@@ -50,7 +50,7 @@ function reinitialiserNouv(){
         currentElement = currentElement.previousElementSibling;
         aSupprimer.remove();
     }
-    var enonceRepMulti1 = document.getElementsByName('enonceRepMulti1')[0];
+    var enonceRepMulti1 = document.getElementsByName('enonceRepMulti')[0];
     enonceRepMulti1.value = "Entrez l'énoncé ici";
     var QcmRepMulti = document.getElementsByName('QcmRepMulti')[0];
     QcmRepMulti.style.display="none";
@@ -71,7 +71,6 @@ function reinitialiserNouv(){
     var options = [{'id':0,'name':'-'},{'id':1,'name':'Qcm a réponse unique'},{'id':2,'name':'Qcm normal'}];
     var typeSelect = document.getElementsByName('typeSelect')[0];
     var type = convertTextToSelect(typeSelect,'type',options,0);
-    //type.onchange = function(){afficherRep(this);};
     type.setAttribute("onChange","afficherRep(this);");
 
     var nouvelleQuestion = document.getElementsByName('nouvelleQuestion')[0];
@@ -134,7 +133,7 @@ function validerQues(){
     var enonce = document.getElementsByName("enonceQues")[0].value; //Enoncé de la question
     var listMC = document.getElementsByName("motCle") //Liste des mots clés
     
-    var question ={ "enonce":enonce,"estPrivee":estPrivee};
+    var question ={"enonce":enonce,"estPrivee":estPrivee};
     var listRep = [];
     for (let j= 0; j<(listEnonce.length); j++){
         var enonceRep = listEnonce[j].value;
@@ -142,7 +141,7 @@ function validerQues(){
         if (listCorr[j].checked ==true ){
             estCorrecte=true;
         }
-        var reponse = { "enonce":enonceRep,"estCorrecte":estCorrecte};
+        var reponse = {"enonce":enonceRep,"estCorrecte":estCorrecte};
         listRep.push(reponse);
     }
     var listMotsCles = [];
@@ -162,7 +161,6 @@ function validerQues(){
         },
         method: 'POST',
         success: function(result){
-            nbQuestions = nbQuestions+1;
             reinitialiserNouv();
             var ligneQuestions = document.getElementsByName('questions')[0];
             ligneQuestions.style.display="inline";
@@ -174,17 +172,41 @@ function validerQues(){
             td0.style.display = 'none';
             tr.appendChild(td0);
             var td1 = document.createElement('TD');
-            td1.appendChild(document.createTextNode(nbQuestions));
+            if(result.repUnique){
+                td1.appendChild(document.createTextNode('Réponse unique'));
+            } else {
+                td1.appendChild(document.createTextNode('Réponses multiples'));
+            }
             tr.appendChild(td1);
             var td2 = document.createElement('TD');
             td2.appendChild(document.createTextNode(result.enonce));
             tr.appendChild(td2);
             var td3 = document.createElement('TD');
+            var ul1 = document.createElement('UL');
+            for(let i=0; i<(result.listeReponses).length; i++){
+                var li = document.createElement('LI');
+                li.appendChild(document.createTextNode(result.listeReponses[i].enonceRep));
+                ul1.appendChild(li);
+            }
+            td3.appendChild(ul1);
+            tr.appendChild(td3);
+            var td4 = document.createElement('TD');
+            var ul2 = document.createElement('UL');
+            for(let i=0; i<(result.listeReponses).length; i++){
+                if(result.listeReponses[i].estCorrecte){
+                    var li = document.createElement('LI');
+                    li.appendChild(document.createTextNode(result.listeReponses[i].enonceRep));
+                    ul2.appendChild(li);
+                }
+            }
+            td4.appendChild(ul2);
+            tr.appendChild(td4);
+            var td5 = document.createElement('TD');
             var button = document.createElement('BUTTON');
             button.setAttribute('onclick','deleteQues(this)');
             button.appendChild(document.createTextNode("X"));
-            td3.appendChild(button);
-            tr.appendChild(td3);
+            td5.appendChild(button);
+            tr.appendChild(td5);
             tableQuestions.appendChild(tr);
         },
         error: function(res,stat,err){
@@ -277,33 +299,66 @@ function afficheQuestions(ref) {
 }
 
 function ajouterQues(ref){
-    nbQuestions = nbQuestions+1;
-    reinitialiserAnc(ref);
-    var ligneQuestions = document.getElementsByName('questions')[0];
-    ligneQuestions.style.display="inline";
-    var tableQuestions = document.getElementsByName('tableQuestions')[0];
-    var tr = document.createElement('TR');
-    var td0 = document.createElement('TD');
-    td0.appendChild(document.createTextNode(ref.options[ref.selectedIndex].value));
-    td0.setAttribute('name','id');
-    td0.style.display = 'none';
-    tr.appendChild(td0);
-    var td1 = document.createElement('TD');
-    td1.appendChild(document.createTextNode(nbQuestions));
-    tr.appendChild(td1);
-    var td2 = document.createElement('TD');
-    td2.appendChild(document.createTextNode(ref.options[ref.selectedIndex].firstChild.nodeValue));
-    tr.appendChild(td2);
-    var td3 = document.createElement('TD');
-    var button = document.createElement('BUTTON');
-    button.setAttribute('onclick','deleteQues(this)');
-    button.appendChild(document.createTextNode("X"));
-    td3.appendChild(button);
-    tr.appendChild(td3);
-    tableQuestions.appendChild(tr);
-
-    var boutonValidation = document.getElementsByName('boutonValidationQuiz')[0];
-    boutonValidation.style.display="inline";
+    var quesId = ref.options[ref.selectedIndex].value;
+    $.ajax({
+        url:"afficherQuestion.do",
+        data: {
+            "quesId": quesId
+        },
+        method: 'POST',
+        success: function(result){
+            reinitialiserAnc(ref);
+            var ligneQuestions = document.getElementsByName('questions')[0];
+            ligneQuestions.style.display="inline";
+            var tableQuestions = document.getElementsByName('tableQuestions')[0];
+            var tr = document.createElement('TR');
+            var td0 = document.createElement('TD');
+            td0.appendChild(document.createTextNode(result.quesId));
+            td0.setAttribute('name','id');
+            td0.style.display = 'none';
+            tr.appendChild(td0);
+            var td1 = document.createElement('TD');
+            if(result.repUnique){
+                td1.appendChild(document.createTextNode('Réponse unique'));
+            } else {
+                td1.appendChild(document.createTextNode('Réponses multiples'));
+            }
+            tr.appendChild(td1);
+            var td2 = document.createElement('TD');
+            td2.appendChild(document.createTextNode(result.enonce));
+            tr.appendChild(td2);
+            var td3 = document.createElement('TD');
+            var ul1 = document.createElement('UL');
+            for(let i=0; i<(result.listeReponses).length; i++){
+                var li = document.createElement('LI');
+                li.appendChild(document.createTextNode(result.listeReponses[i].enonceRep));
+                ul1.appendChild(li);
+            }
+            td3.appendChild(ul1);
+            tr.appendChild(td3);
+            var td4 = document.createElement('TD');
+            var ul2 = document.createElement('UL');
+            for(let i=0; i<(result.listeReponses).length; i++){
+                if(result.listeReponses[i].estCorrecte){
+                    var li = document.createElement('LI');
+                    li.appendChild(document.createTextNode(result.listeReponses[i].enonceRep));
+                    ul2.appendChild(li);
+                }
+            }
+            td4.appendChild(ul2);
+            tr.appendChild(td4);
+            var td5 = document.createElement('TD');
+            var button = document.createElement('BUTTON');
+            button.setAttribute('onclick','deleteQues(this)');
+            button.appendChild(document.createTextNode("X"));
+            td5.appendChild(button);
+            tr.appendChild(td5);
+            tableQuestions.appendChild(tr);
+        }, error: function(res,stat,err){
+            console.log(res.responseText);
+        }
+    });
+    
 }
 
 function saveQuiz(ref){

@@ -93,8 +93,10 @@
                         <table name="tableQuestions" class="liste">
                             <tr>
                                 <th style="display: none">id</th>
-                                <th>Question n°</th>
+                                <th>Type</th>
                                 <th>Énoncé</th>
+                                <th>Réponses</th>
+                                <th>Bonne(s) réponse(s)</th>
                                 <th></th>
                             </tr>
                         </table>
@@ -130,12 +132,12 @@
                             <tr name="firstRep">
                                 <td>Réponses :</td>
                                 <td name="QcmRepUni" style="display:none">
-                                    <input name="enonceRepUni1" type="text" value="Entrez l'énoncé ici"/>
+                                    <input name="enonceRepUni" type="text" value="Entrez l'énoncé ici"/>
                                     <input type="radio" name="correctesUni" value=true>
                                     <button onclick="deleteRep(this);">X</button>
                                 </td>
                                 <td name="QcmRepMulti" style="display:none">
-                                    <input name="enonceRepMulti1" type="text" value="Entrez l'énoncé ici"/>
+                                    <input name="enonceRepMulti" type="text" value="Entrez l'énoncé ici"/>
                                     <input type="checkbox" name="correctesMulti" value=true>
                                     <button onclick="deleteRep(this);">X</button>
                                 </td>
